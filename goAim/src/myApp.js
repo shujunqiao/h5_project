@@ -26,6 +26,7 @@
 
 var MyLayer = cc.Layer.extend({
     //balls:[],
+    _playerMgr:null,
     ctor:function(){
         this._super();
         cc.log("in ctor.");
@@ -39,16 +40,21 @@ var MyLayer = cc.Layer.extend({
         console.log("in MyLayer, to add map.");
         var _map = new MapLayer();
         _map.init();
-        _map.setPosition(cc.p(100,150));
+        _map.setPosition(cc.p(0,0));
+        _map.setAnchorPoint(cc.p(0,0));
         this.addChild(_map);
+        //add players
+        this._playerMgr = new PlayerMgr();
+        this._playerMgr.init();
+        this.addChild(this._playerMgr);
         //
         testArr();
 
         var arrObjs = cc.red();
-        console.log("0 arrObjs: ", arrObjs);
+        //console.log("0 arrObjs: ", arrObjs);
         arrObjs = cc.RED;
         //var item = cc.
-        console.log("1 arrObjs: ", arrObjs);
+        //console.log("1 arrObjs: ", arrObjs);
         var colorA = cc.Color3B();
     }
 });

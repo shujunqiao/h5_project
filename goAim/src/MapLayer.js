@@ -8,9 +8,13 @@
 
 var MapLayer = cc.Layer.extend({
     init:function(){
-        console.log("in MapLayer, to add whole map.");
+        //console.log("in MapLayer, to add whole map.");
         var _map = new WholeMap();
         _map.init();
+        pos_map.x = design_size.width / 2;
+        pos_map.y = (design_size.height + _offset.height) / 2;
+        console.log("pos_map: ", pos_map);
+        _map.setPosition(pos_map);
         this.addChild(_map);
     }
 });
@@ -20,7 +24,6 @@ var OneDir = cc.Node.extend({
         var drawNode = cc.DrawNode.create();
         //drawNode.setColor(cc.BLUE);
         drawNode.setPosition(cc.p(10,10));
-
         var color = getColor();
         for(var i=1; i<7; i++){
             drawNode.drawSegment(cc.p(-l_w, l_w*i), cc.p(l_w, l_w*i), 0.5, color);
@@ -36,7 +39,7 @@ var OneDir = cc.Node.extend({
 
 var WholeMap = cc.Node.extend({
     init:function(){
-        console.log("in WholwMap, to add line.");
+        //console.log("in WholwMap, to add line.");
         var _sp = cc.Sprite.create(s_line);
         //this.addChild(_sp);
         //_sp.setPosition(cc.p(0, 50));
@@ -55,12 +58,18 @@ var WholeMap = cc.Node.extend({
             dir.setPosition(arrPos[i]);
             this.addChild(dir);
         }
+    },
+    getWidth:function(){
+        return 6*l_w*2;
     }
 });
 
 var strLine = "line";
 var l_w = 16;
-var arrPos = [cc.p(0,0), cc.p(0,l_w+4), cc.p(l_w+4,l_w+4), cc.p(l_w+4)];
+var arrPos = [cc.p(0,0), cc.p(0,l_w+4), cc.p(l_w+4,l_w+4), cc.p(l_w+4,0)];
+var pos_map = cc.p(100, 50);
+var design_size = cc.rect(0,0,480, 320);
+var _offset = cc.size(0, 30);
 
 var getColor = function(){
     var r = getRandN(255);
