@@ -1,4 +1,5 @@
 h5_project
 ==========
 
-for h5
+for h5 project.
+goAim.
