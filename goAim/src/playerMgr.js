@@ -22,47 +22,112 @@ var PlayerMgr = cc.Layer.extend({
         //
         this._players = [];
 
-//        for(var i=0; i<3; i++){
-//            var player = new Player();
-//            player.init(arrTypes[i], i);
-//            this.addChild(player);
-//            this._players.addChild(player);
-//        }
-        console.log("arrDotPos: ", arrDotPos);
-        var _dNode = cc.DrawNode.create();
-        this.addChild(_dNode);
-        _dNode.setPosition(cc.p(100, 100));
-        for(var i=0; i<arrDotPos.length; i++){
-            var color = getColor();
-            for(var j=0; j<arrDotPos[i].length; j++){
-                _dNode.drawDot(arrDotPos[i][j], 2, color);
-            }
+        for(var i=0; i<3; i++){
+            var player = new Player();
+            player.init(arrTypes[i], i);
+            this.addChild(player);
+            player.setPosition(arrDotPos[i][0]);
+            this._players.push(player);
         }
-        _dNode.draw();
+//        console.log("arrDotPos: ", arrDotPos);
+//        console.log("pos_map", pos_map);
+//        var _dNode = cc.DrawNode.create();
+//        this.addChild(_dNode);
+//        for(var i=0; i<arrDotPos.length; i++){
+//            var color = getColor();
+//            for(var j=0; j<arrDotPos[i].length; j++){
+//                _dNode.drawDot( arrDotPos[i][j], 2, color);
+//            }
+//        }
+//        _dNode.draw();
     },
     btnClick:function(pSender){
         console.log("click btn.");
+        var aN = 0;
+        for(var i=0; i<3; i++){
+            aN += this._players[i].getCurNum();
+        }
+        var idx = 0;
+        switch (aN){
+            case 1:
+            case 4:
+            case 7: //player
+                idx = 0;
+                break;
+            case 2:
+            case 5:
+            case 8: //ai-1
+                idx = 1;
+                break;
+            case 3:
+            case 6:
+            case 9: //ai-2
+                idx = 2;
+                break;
+        }
+        console.log("aN", aN, "idx", idx);
+        this._players[idx].addStep();
+        var iStep = this._players[idx].getCurStep();
+        if(iStep < 7){
+            this._players[idx].setPosition(arrDotPos[idx][iStep]);
+        }
+        else{
+            this._players[idx].setPosition(arrDotPos[3][iStep - 6]);
+        }
+
+        //
+        if(this.gameIsOver()){
+            var str = "game over, "
+            if(GAME_INFO.WINNER == PLAYER_TYPE.PLAYER)
+                str += "You Win!";
+            else{
+                str += "You Lose!";
+            }
+            console.log(str);
+        }
+    },
+    gameIsOver:function(){
+        for(var i=0; i<3; i++){
+            console.log("this._players[i].getCurStep", this._players[i].getCurStep());
+            if(this._players[i].getCurStep() >= STEP_MAX){
+                GAME_INFO.WINNER = this._players[i].getType();
+                return true;
+            }
+        }
+        return false;
     }
 });
 
-var PLAYER_TYPE = {
-    PLAYER:0,
-    AI:1
-}
-var arrTypes = [0, 1, 1];
-var arrColor = [cc.c4f(255,0,255,255), cc.c4f(0,255,255,255), cc.c4f(255,0,255,255)];
-var arrDotPos;
 var Player = cc.Node.extend({
     _type:null,
     _idx:null,
+    _curStep:0,
+    _curNum:0,
     init:function(type, idx){
         this._type = type;
         this._idx = idx;
+        this._curStep = 0;
+        this._curNum = 0;
 
         var _draw = cc.DrawNode.create();
         _draw.drawDot(cc.p(0,0), 3, arrColor[idx]);
         _draw.draw();
         this.addChild(_draw);
+    },
+    getType:function(){
+        return this._type;
+    },
+    setCurStep:function(idx){
+        this._curStep = idx;
+    },
+    getCurStep:function(){
+        return this._curStep;
+    },
+    addStep:function(){
+        this._curStep ++;
+    },
+    getCurNum:function(){
+        return getRand3();
     }
 });
 

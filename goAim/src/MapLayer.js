@@ -18,13 +18,6 @@ var MapLayer = cc.Layer.extend({
         this.addChild(_map);
     }
 });
-//0: down; 1:left; 2:right; 3:up;
-var DIR_4 = {
-    DOWN:0,
-    LEFT:1,
-    RIGHT:2,
-    UP:3
-};
 
 var OneDir = cc.Node.extend({
     init:function(dir){
@@ -53,19 +46,19 @@ var OneDir = cc.Node.extend({
                     p_y = l_w*i;
                     break;
                 case DIR_4.LEFT:
-                    p_x = -l_w*i;
-                    p_y = l_w*7;
+                    p_x = -l_w*(6-i);
+                    p_y = l_w*6;
                     break;
                 case DIR_4.RIGHT:
-                    p_x = l_w*i;
-                    p_y = l_w*7;
+                    p_x = l_w*(6-i);
+                    p_y = l_w*6;
                     break;
                 case DIR_4.UP:
                     p_x = 0;
-                    p_y = l_w*7+l_w*i;
+                    p_y = l_w*6+l_w*i;
                     break;
             };
-            _pos[i] = cc.p(p_x, p_y);
+            _pos[i] = cc.pAdd(cc.p(p_x, p_y), cc.p(250, 88));
         }
         arrDotPos[dir] = _pos;
     }
@@ -98,22 +91,3 @@ var WholeMap = cc.Node.extend({
         return 6*l_w*2;
     }
 });
-
-var strLine = "line";
-var l_w = 16;
-var arrPos = [cc.p(0,0), cc.p(0,l_w+4), cc.p(l_w+4,l_w+4), cc.p(l_w+4,0)];
-var pos_map = cc.p(100, 50);
-var design_size = cc.rect(0,0,480, 320);
-var _offset = cc.size(0, 30);
-
-var getColor = function(){
-    var r = getRandN(255);
-    var g = getRandN(255);
-    var b = getRandN(255);
-    return cc.c4f(r,g,b,255);
-};
-//get random number 0~n
-var getRandN = function(num){
-    var aNum = cc.RANDOM_0_1() * num | 0;
-    return aNum;
-}

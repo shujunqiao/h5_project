@@ -42,6 +42,7 @@
             'src/MapLayer.js',
             'src/LayerManager.js',
             'src/playerMgr.js',
+            'src/cmdFunc.js',
             'src/myApp.js'//add your own files in order here
         ]
     };
