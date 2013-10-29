@@ -18,9 +18,16 @@ var MapLayer = cc.Layer.extend({
         this.addChild(_map);
     }
 });
+//0: down; 1:left; 2:right; 3:up;
+var DIR_4 = {
+    DOWN:0,
+    LEFT:1,
+    RIGHT:2,
+    UP:3
+};
 
 var OneDir = cc.Node.extend({
-    init:function(){
+    init:function(dir){
         var drawNode = cc.DrawNode.create();
         //drawNode.setColor(cc.BLUE);
         drawNode.setPosition(cc.p(10,10));
@@ -34,6 +41,33 @@ var OneDir = cc.Node.extend({
         drawNode.draw();
 
         this.addChild(drawNode);
+
+        //
+        var _pos = [];
+        for(var i=0; i<7; i++){
+            var p_x = 0;
+            var p_y = 0;
+            switch (dir){
+                case DIR_4.DOWN:
+                    p_x = 0;
+                    p_y = l_w*i;
+                    break;
+                case DIR_4.LEFT:
+                    p_x = -l_w*i;
+                    p_y = l_w*7;
+                    break;
+                case DIR_4.RIGHT:
+                    p_x = l_w*i;
+                    p_y = l_w*7;
+                    break;
+                case DIR_4.UP:
+                    p_x = 0;
+                    p_y = l_w*7+l_w*i;
+                    break;
+            };
+            _pos[i] = cc.p(p_x, p_y);
+        }
+        arrDotPos[dir] = _pos;
     }
 });
 
@@ -49,10 +83,11 @@ var WholeMap = cc.Node.extend({
         var frame = cc.SpriteFrame.createWithTexture(_sp.getTexture(), cc.rect(0,0,l_w,6));
         cc.SpriteFrameCache.getInstance().addSpriteFrame(frame, strLine);
 
+        arrDotPos = [];
         for(var i=0; i<4; i++)
         {
             var dir = new OneDir();
-            dir.init();
+            dir.init(i);
             dir.setAnchorPoint(cc.p(0,0));
             dir.setRotation(90*i);
             dir.setPosition(arrPos[i]);

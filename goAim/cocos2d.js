@@ -41,7 +41,7 @@
             'src/resource.js',
             'src/MapLayer.js',
             'src/LayerManager.js',
-            'src/PlayerMgr.js',
+            'src/playerMgr.js',
             'src/myApp.js'//add your own files in order here
         ]
     };
